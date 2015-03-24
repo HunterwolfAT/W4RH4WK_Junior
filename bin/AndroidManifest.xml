@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.w4rh4wk"
+    package="at.ac.uibk.robotwasd"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="19" />
 
+    <uses-feature android:name="android.hardware.usb.host" />
 
     <application
         android:allowBackup="true"
@@ -15,17 +16,19 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="at.ac.uibk.robotwasd.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
-			 <action android:name="android.intent.action.MAIN" />
-			 <category android:name="android.intent.category.LAUNCHER" />
-			 <action
-			android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-			 </intent-filter>
-			 <meta-data
-			 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-			 android:resource="@xml/device_filter" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
         </activity>
     </application>
 
