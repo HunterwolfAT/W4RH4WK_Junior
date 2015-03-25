@@ -17,7 +17,13 @@ public class MainActivity extends Activity {
 	@SuppressWarnings("unused")
 	private String TAG = "iRobot";
 	private TextView textLog;
+    private TextView xText;
+    private TextView yText;
+    private TextView ThetaText;
 	private FTDriver com;
+    private int xCoord = 0;
+    private int yCoord = 0;
+    private float theta = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,14 @@ public class MainActivity extends Activity {
 			textLog.append("[" + text.length() + "] " + text + "\n");
 		}
 	}
+
+    public void logCoord(Integer x, Integer y, Float theta) {
+
+            xText.setText(x.toString());
+            yText.setText(y.toString());
+            ThetaText.setText(theta.toString());
+
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -219,10 +233,10 @@ public class MainActivity extends Activity {
 	}
 	
 	public void robotTurn(byte degree) {
-		float x = (float)degree * 0.86f;
+		float x = (float)degree * 1.13f;
 		comReadWrite(
-			new byte[] { 'l', (byte)x, '\r', '\n' }
-		);
+                new byte[]{'l', (byte) x, '\r', '\n'}
+        );
 	}
 	
 	public void driveSquare_onClick(View v)
@@ -255,63 +269,140 @@ public class MainActivity extends Activity {
 		}
 		*/
 		//robotDrive((byte)-800);
-		logText(comReadWrite(new byte[] { 'w', '\r', '\n' }));
-		while(true)
-		{
-			if(!AvoidFront())
-			{
-				break;
-			}
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+
+		//logText(comReadWrite(new byte[] { 'w', '\r', '\n' }));
+        //AvoidEverythingTurnL();
+        DriveTo(200,100);
+
+        //AvoidFront();
 	}
+
+    public void DriveTo(int x, int y)
+    {
+        try
+        {
+            int td = x * 10;
+            int tx = x * 20;
+            robotDrive((byte) -x);
+            xCoord += x;
+            Thread.sleep(tx);
+            logCoord(xCoord,yCoord,theta);
+            if(y > 0)
+            {
+                robotTurn((byte) 90);
+                theta += 90;
+            }
+            else if (y < 0)
+            {
+                robotTurn((byte)-90);
+                theta += -90;
+            }
+            if(y != 0)
+            {
+                Thread.sleep(td);
+            }
+            logCoord(xCoord,yCoord,theta);
+            robotDrive((byte) -y);
+            yCoord += y;
+            logCoord(xCoord,yCoord,theta);
+            Thread.sleep(y*20);
+            robotTurn((byte)-theta);
+            theta = 0;
+            logCoord(xCoord,yCoord,theta);
+        }
+        catch(Exception e)
+        {
+            //fuck execptions
+        }
+
+
+    }
 	
-	public void AvoidEverything(View v)
+	public void AvoidEverythingTurnL()
 	{
-		
+        while(true)
+        {
+            try {
+                if(!AvoidFront())
+                {
+                    break;
+                }
+
+                Thread.sleep(100);
+
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        robotTurn((byte)90);
 	}
 	
 	public boolean AvoidFront()
 	{
 		String s = comReadWrite(new byte[] { 'q', '\r', '\n' });
 		String arr[] = s.split(" ");
-			if(arr[arr.length -2].equals("0x1d") || arr[arr.length -2].equals("0x1c") || arr[arr.length -2].equals("0x1e"))
-			{
+		/*if(arr[arr.length -2].equals("0x1d") || arr[arr.length -2].equals("0x1c") || arr[arr.length -2].equals("0x1e"))
+		{
 				logText(comReadWrite(new byte[] { 's', '\r', '\n' }));
 				logText("stop");
 				return false;
-			}
-		return true;
-		/*Boolean flag = false;
+		}*/
+		//return true;
+		Boolean flag = false;
 		Integer[] n = new Integer[8];
 		int i = 0;
-		for(String t : arr)
-		{
-			if(t.contains("sensor:"))
-			{
-				flag = true;
-				continue;
-			}
-			if(flag)
-			{
-				//n[i++] = Integer.valueOf(t.substring(2), 16);
-				//Integer.parseInt("10");
-				//logText(Integer.decode(t).toString());
-				
-				
-			}
-		}
+		for(String t : arr) {
+            if (t.contains("sensor:")) {
+                flag = true;
+                continue;
+            }
+            if (flag) {
+                //n[i++] = Integer.valueOf(t.substring(2), 16);
+                //Integer.parseInt("10");
+                //logText(Integer.decode(t).toString());
+                Integer base16 = (16*ReallyStupidFunction(t.charAt(2)))+ReallyStupidFunction(t.charAt(3));
+                n[i++] = base16;
+               // logText(new String(t.charAt(2) + " " + t.charAt(3)));
+            }
+        }
 		flag = false;
-		/*
-		for(Integer x : n)
-		{
-			logText(x.toString());
-		}
-			*/
+       // logText(n[5].toString());
+		if(n[5] <= 25)
+        {
+            logText(comReadWrite(new byte[] { 's', '\r', '\n' }));
+			logText("stop");
+            return false;
+        }
+       /* for(Integer x : n)
+        {
+            logText(x.toString());
+        }*/
+
+        return true;
 	}
+    //because java std lib isn't working...
+    private Integer ReallyStupidFunction(char c)
+    {
+        switch(c)
+        {
+            case '0': return 0;
+            case '1': return 1;
+            case '2': return 2;
+            case '3': return 3;
+            case '4': return 4;
+            case '5': return 5;
+            case '6': return 6;
+            case '7': return 7;
+            case '8': return 8;
+            case '9': return 9;
+            case 'a': return 10;
+            case 'b': return 11;
+            case 'c': return 12;
+            case 'd': return 13;
+            case 'e': return 14;
+            case 'f': return 15;
+        }
+        return 0;
+    }
 }
