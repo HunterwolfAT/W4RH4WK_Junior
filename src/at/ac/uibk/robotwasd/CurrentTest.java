@@ -25,6 +25,8 @@ public class CurrentTest implements Runnable
             {
                 if(youShallNotPass)
                 {
+                    //Robot.comReadWrite(new byte[] { 's', '\r', '\n' });
+                    Robot.com.write(new byte[] { 's', '\r', '\n' });
                     return;
                 }
 

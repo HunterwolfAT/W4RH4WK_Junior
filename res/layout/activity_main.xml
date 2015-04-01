@@ -47,7 +47,7 @@
             android:layout_height="71dp"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/textLog"
-            android:onClick="driveSquare_onClick"
+            android:onClick="doTheThing_onClick"
             android:text="DoSth"
             android:layout_row="13"
             android:layout_column="26" />

@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 
 
     private CurrentTest MainThread;
+    Thread x;
     AvoidanceManager AM;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -152,7 +153,7 @@ public class MainActivity extends Activity {
 	// stop
 	public void buttonS_onClick(View v) {
         MainThread.youShallNotPass = true;
-		logText(Robot.comReadWrite(new byte[] { 's', '\r', '\n' }));
+
 	}
 
 	// turn right
@@ -202,43 +203,12 @@ public class MainActivity extends Activity {
 	
 
 	
-	public void driveSquare_onClick(View v)
+	public void doTheThing_onClick(View v)
 	{
-		/*try
-		{
-			int x = 200;
-			int td = x * 10;
-			int tx = x* 20;
-			robotDrive((byte)-x);
-			Thread.sleep(tx);
-			robotTurn((byte)90);
-			Thread.sleep(td);
-			robotDrive((byte)-x);
-			Thread.sleep(tx);
-			robotTurn((byte)90);
-			Thread.sleep(td);
-			robotDrive((byte)-x);
-			Thread.sleep(tx);
-			robotTurn((byte)90);
-			Thread.sleep(td);
-			robotDrive((byte)-x);
-			Thread.sleep(tx);
-			robotTurn((byte)90);
-			x
-		}
-		catch(Exception e)
-		{
-			//fuck Exceptions
-		}
-		*/
-		//robotDrive((byte)-800);
+         x = new Thread(MainThread);
+         x.start();
 
-		//logText(comReadWrite(new byte[] { 'w', '\r', '\n' }));
-        Thread x = new Thread(MainThread);
-        x.start();
-        //DriveTo(200,100);
 
-        //AvoidFront();
 	}
 /*
     public void DriveTo(int x, int y)

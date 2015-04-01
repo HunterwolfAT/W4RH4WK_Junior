@@ -44,7 +44,7 @@ public class AvoidanceManager //implements Callable<Boolean>
         Return false if sth is too close (dist) to the sensor
 
      */
-    public boolean Avoid(Integer dist, Integer sensor) {
+    public synchronized boolean Avoid(Integer dist, Integer sensor) {
         String s = Robot.comReadWrite(new byte[]{'q', '\r', '\n'});
         //Log.d("Info", s);
         String arr[] = s.split(" ");
@@ -57,9 +57,14 @@ public class AvoidanceManager //implements Callable<Boolean>
                 flag = true;
                 continue;
             }
-            if (flag) {
-                Integer base16 = (16 * ReallyStupidFunction(t.charAt(2))) + ReallyStupidFunction(t.charAt(3));
-                n[i++] = base16;
+            if (flag)
+            {
+                //so that other commands can't influence this function....
+                if(t.startsWith("0x"))
+                {
+                    Integer base16 = (16 * ReallyStupidFunction(t.charAt(2))) + ReallyStupidFunction(t.charAt(3));
+                    n[i++] = base16;
+                }
             }
         }
         if (n[sensor] <= dist)
