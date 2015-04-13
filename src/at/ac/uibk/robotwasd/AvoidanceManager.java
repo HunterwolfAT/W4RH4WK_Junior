@@ -46,7 +46,7 @@ public class AvoidanceManager //implements Callable<Boolean>
      */
     public synchronized boolean Avoid(Integer dist, Integer sensor) {
         String s = Robot.comReadWrite(new byte[]{'q', '\r', '\n'});
-        //Log.d("Info", s);
+        Log.d("Info", s);
         String arr[] = s.split(" ");
 
         Boolean flag = false;
@@ -59,7 +59,8 @@ public class AvoidanceManager //implements Callable<Boolean>
             }
             if (flag)
             {
-                //so that other commands can't influence this function....
+                //so that other commands can't influence this function.... (other commands write to the std output of the robot, really bad for multithreading
+                //maybe we don't need the sensor flag anymore, too lazy to try....
                 if(t.startsWith("0x"))
                 {
                     Integer base16 = (16 * ReallyStupidFunction(t.charAt(2))) + ReallyStupidFunction(t.charAt(3));
@@ -67,15 +68,13 @@ public class AvoidanceManager //implements Callable<Boolean>
                 }
             }
         }
-        if (n[sensor] <= dist)
+        if(n[6] != null)
         {
-            return false;
+            if (n[sensor] <= dist) {
+                return false;
+            }
         }
 
-       /* for(Integer x : n)
-        {
-            logText(x.toString());
-        }*/
 
         return true;
     }

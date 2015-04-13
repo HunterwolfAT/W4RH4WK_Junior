@@ -14,6 +14,12 @@ public class Robot
     public static FTDriver com;
 
 
+    public static boolean driveForward;
+
+    public static boolean turnLeft;
+
+    public static boolean turnRight;
+
 
 
     public static String SetLeds(byte red, byte blue)
@@ -46,6 +52,20 @@ public class Robot
 
     public static String comReadWrite(byte[] data)
     {
+
+        if(data[0] == 's')
+        {
+            turnLeft = false;
+            turnRight = false;
+            driveForward = false;
+        }
+        else if(data[0] == 'w')
+        {
+            driveForward = true;
+            turnLeft = false;
+            turnRight = false;
+        }
+        else if(data[0] == 'l')
         com.write(data);
         try {
             Thread.sleep(100);

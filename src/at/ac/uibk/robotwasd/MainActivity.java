@@ -16,6 +16,27 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+
+
+
+/*
+    General Information/Bugs/ToDo things
+
+    Never ever ever ever change the velocity of the Robot.... you will kill it
+    Don't play with the LEDs. App will crash, no idea why (didn't change a thing)
+    The app is multithreaded but the implementation isn't really clean so don't do anything funky
+    Be careful when writing sth to the com interface (it writes things back and can kill our avoidanceManager)
+    Do not start a second mainthread!!!! it is only there so the interface isn't stuck
+
+    Odometry isn't working right now, do not try to use it
+    if you have spare time you can try to make the avoidance manager callable again (multithreaded), but I had problems with the Future<Boolean> isDone() method, it only returned true( so the robot was doing some crazy shit)
+
+
+
+
+
+ */
+
 public class MainActivity extends Activity {
 
 	@SuppressWarnings("unused")
@@ -205,8 +226,13 @@ public class MainActivity extends Activity {
 	
 	public void doTheThing_onClick(View v)
 	{
-         x = new Thread(MainThread);
-         x.start();
+        //check if x is null then execute or thread was killed
+        if(x == null || !x.isAlive())
+        {
+            x = new Thread(MainThread);
+            x.start();
+        }
+
 
 
 	}

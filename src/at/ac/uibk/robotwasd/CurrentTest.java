@@ -18,6 +18,7 @@ public class CurrentTest implements Runnable
 
     public void run()
     {
+       // Robot.SetVelocity((byte) 60, (byte) 60);
         youShallNotPass = false;
         while(true)
         {
