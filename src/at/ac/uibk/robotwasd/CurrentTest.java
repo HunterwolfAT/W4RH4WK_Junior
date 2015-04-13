@@ -51,8 +51,8 @@ public class CurrentTest implements Runnable {
 
 	}
 
-	public void BugAvoid1(float x, float y, float theta) {
-		float alpha = (float) Math.acos((double)(x/y));
+	public void BugAvoid(float x, float y, float theta) {
+		float alpha = (float) Math.atan((double)((y - Robot.yCoord))/(x - Robot.xCoord));
 		float toTurn = alpha - Robot.theta;
 		Robot.Turn((byte) toTurn);
 		Robot.com.write(new byte[] { 'w', '\r', '\n' });
