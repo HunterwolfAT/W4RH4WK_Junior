@@ -7,8 +7,8 @@ import jp.ksksue.driver.serial.FTDriver;
  */
 public class Robot
 {
-    public static Integer xCoord;
-    public static Integer yCoord;
+    public static Float xCoord;
+    public static Float yCoord;
     public static Float theta;
     public static MainActivity  j;
     public static FTDriver com;
@@ -16,9 +16,6 @@ public class Robot
 
     public static boolean driveForward;
 
-    public static boolean turnLeft;
-
-    public static boolean turnRight;
 
 
 
@@ -55,17 +52,19 @@ public class Robot
 
         if(data[0] == 's')
         {
-            turnLeft = false;
-            turnRight = false;
+
             driveForward = false;
         }
         else if(data[0] == 'w')
         {
             driveForward = true;
-            turnLeft = false;
-            turnRight = false;
+
         }
         else if(data[0] == 'l')
+        {
+            driveForward = false;
+            theta += (float)(data[1]);
+        }
         com.write(data);
         try {
             Thread.sleep(100);
