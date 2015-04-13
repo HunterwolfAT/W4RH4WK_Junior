@@ -7,22 +7,20 @@ public class OdometryManager implements Runnable
 {
 
 
-    public Float[] getPos()
-    {
-
-
-    }
-
     public void run()
     {
         while(true)
         {
 
-            Thread.sleep(100);
+            try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
             if(Robot.driveForward)
             {
-                Robot.xCoord = Robot.xCoord + Math.cos(Robot.theta.doubleValue());
-                Robot.yCoord = Robot.yCoord + Math.sin(Robot.theta.doubleValue());
+                Robot.xCoord = Robot.xCoord + (float) Math.cos(Robot.theta.doubleValue());
+                Robot.yCoord = Robot.yCoord + (float) Math.sin(Robot.theta.doubleValue());
             }
 
         }

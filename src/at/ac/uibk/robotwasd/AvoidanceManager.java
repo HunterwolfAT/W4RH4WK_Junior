@@ -46,7 +46,7 @@ public class AvoidanceManager //implements Callable<Boolean>
      */
     public synchronized boolean Avoid(Integer dist, Integer sensor) {
         String s = Robot.comReadWrite(new byte[]{'q', '\r', '\n'});
-        Log.d("Info", s);
+        //Log.d("Info", s);
         String arr[] = s.split(" ");
 
         Boolean flag = false;
