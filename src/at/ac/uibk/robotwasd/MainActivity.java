@@ -236,54 +236,6 @@ public class MainActivity extends Activity {
 
 
 	}
-/*
-    public void DriveTo(int x, int y)
-    {
-        try
-        {
-
-            int td = x * 10;
-            int tx = x * 20;
-            Robot.Drive((byte) -x);
-            xCoord += x;
-            Thread.sleep(tx);
-            //logCoord(xCoord,yCoord,theta);
-            if(y > 0)
-            {
-                Robot.Turn((byte) 90);
-                theta += 90;
-            }
-            else if (y < 0)
-            {
-                Robot.Turn((byte) -90);
-                theta += -90;
-            }
-            if(y != 0)
-            {
-                Thread.sleep(td);
-            }
-            //logCoord(xCoord,yCoord,theta);
-            Robot.Drive((byte) -y);
-            yCoord += y;
-            //logCoord(xCoord,yCoord,theta);
-            Thread.sleep(y*20);
-            Robot.Turn((byte) -theta);
-            theta = 0;
-            //logCoord(xCoord,yCoord,theta);
-        }
-        catch(Exception e)
-        {
-            //fuck execptions
-        }
-
-
-    }
-*/
-	public void AvoidEverythingTurnL()
-	{
-
-
-	}
 	
 
 }

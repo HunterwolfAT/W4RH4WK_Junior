@@ -1,7 +1,5 @@
 package at.ac.uibk.robotwasd;
 
-import java.util.concurrent.RunnableFuture;
-
 /**
  * Created by effi on 3/31/15.
  */
@@ -44,17 +42,22 @@ public class CurrentTest implements Runnable {
 				Thread.sleep(200);
 
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 	}
-
-	public void BugAvoid(float x, float y, float theta) {
-		float alpha = (float) Math.atan((double)((y - Robot.yCoord))/(x - Robot.xCoord));
+	/**
+	 * implements the bug 0 algorithm from the lecture 
+	 * @param x goal x coordinate
+	 * @param y goal y coordinate
+	 * @param theta goal angle
+	 */
+	public void bugAvoid(float x, float y, float theta) { //TODO magic numbers 
+		float alpha = (float) Math.toDegrees(Math.atan((double) ((y - Robot.yCoord)) / (x - Robot.xCoord)));
 		float toTurn = alpha - Robot.theta;
-		Robot.Turn((byte) toTurn);
+		checkAngle(toTurn);
+		
 		Robot.com.write(new byte[] { 'w', '\r', '\n' });
 		if (!AM.Avoid(30, 6)) {
 			try {
@@ -64,20 +67,53 @@ public class CurrentTest implements Runnable {
 			}
 		}
 		Robot.com.write(new byte[] { 'w', '\r', '\n' });
-		while(AM.Avoid(15, 3))
-		{
+		while(AM.Avoid(15, 3)) { 
 			Robot.com.write(new byte[] { 's', '\r', '\n' });
 		}
 		
-		if (Robot.xCoord == x && Robot.yCoord == y) { //TODO add approximation 
+		if (floatApproximation(Robot.xCoord, x, (float) 0.1) && floatApproximation(Robot.yCoord, y, (float) 0.1)) { //range depends on odometry...
+			Robot.com.write(new byte[] { 's', '\r', '\n' });
 			toTurn = theta - Robot.theta;
-			Robot.Turn((byte) toTurn);
+			checkAngle(toTurn);
 			return;
+			
 		}
-		BugAvoid(x, y, theta);
+		bugAvoid(x, y, theta);
 		
 		
 	}
+	
+	/**
+	 * checks if two floats are within a range from each other 
+	 * @param a
+	 * @param b
+	 * @param range
+	 * @return
+	 */
+	private boolean floatApproximation (float a, float b, float range) {
+		if ( a < b + range && a > b - range)
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * checks if there is a turn to make and executes it if necessary
+	 * @param toTurn angle
+	 */
+	private void checkAngle(float toTurn) {
+		if (toTurn != 0) {
+			Robot.Turn((byte) toTurn);
+			try {
+				Thread.sleep(900);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	
 
 	/**
 	 * turns the robot until it's parallel to an obstacle
