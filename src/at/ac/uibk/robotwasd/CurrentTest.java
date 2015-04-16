@@ -1,5 +1,7 @@
 package at.ac.uibk.robotwasd;
 
+import android.util.Log;
+
 /**
  * Created by effi on 3/31/15.
  */
@@ -15,7 +17,7 @@ public class CurrentTest implements Runnable {
 	public void run() {
 		// Robot.SetVelocity((byte) 60, (byte) 60);
 		youShallNotPass = false;
-		while (true) {
+		/*while (true) {
 			try {
 				if (youShallNotPass) {
 					// Robot.comReadWrite(new byte[] { 's', '\r', '\n' });
@@ -45,7 +47,9 @@ public class CurrentTest implements Runnable {
 				e.printStackTrace();
 			}
 		}
+        */
 
+        bugAvoid(100,100,0);
 	}
 	/**
 	 * implements the bug 0 algorithm from the lecture 
@@ -57,15 +61,21 @@ public class CurrentTest implements Runnable {
 		float alpha = (float) Math.toDegrees(Math.atan((double) ((y - Robot.yCoord)) / (x - Robot.xCoord)));
 		float toTurn = alpha - Robot.theta;
 		checkAngle(toTurn);
-		
+
 		Robot.com.write(new byte[] { 'w', '\r', '\n' });
-		if (!AM.Avoid(30, 6)) {
-			try {
-				turnUntilAlligned();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+
+        while(true) {
+            if (!AM.Avoid(30, 6)) {
+                try {
+                    Log.d("info", "Hey there is sth out there");
+                    turnUntilAlligned();
+                    break;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        /*
 		Robot.com.write(new byte[] { 'w', '\r', '\n' });
 		while(AM.Avoid(15, 3)) { 
 			Robot.com.write(new byte[] { 's', '\r', '\n' });
@@ -78,9 +88,14 @@ public class CurrentTest implements Runnable {
 			return;
 			
 		}
-		bugAvoid(x, y, theta);
-		
-		
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        bugAvoid(x, y, theta);
+		*/
+
 	}
 	
 	/**
@@ -121,13 +136,15 @@ public class CurrentTest implements Runnable {
 	 * @throws InterruptedException
 	 */
 	public void turnUntilAlligned() throws InterruptedException {
-		while (true) {
-			if (AM.Avoid(12, 3)) {
-				Robot.Turn((byte) 1);
-				Thread.sleep(10);
-			} else
-				break;
-		}
-	}
+        float dist_to_side_sensor = 0f;
+		dist_to_side_sensor = AM.retSensor(3);
+
+        //angle between Main and side sensor
+        float main_to_side_sens = (float) Math.toRadians(17);
+        Float TurnTheThing = (dist_to_side_sensor * (float) Math.sin(main_to_side_sens)) / 6; //6cm is the distance between the main and the side sensor
+        Log.d("info", Double.toString(Math.asin(TurnTheThing)) +" " + Float.toString(main_to_side_sens) + " " + Float.toString(dist_to_side_sensor) );
+
+        Robot.Turn((byte) Math.toDegrees(Math.asin(TurnTheThing)));
+    }
 
 }

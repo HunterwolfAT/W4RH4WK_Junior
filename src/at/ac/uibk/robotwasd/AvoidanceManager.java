@@ -68,7 +68,7 @@ public class AvoidanceManager //implements Callable<Boolean>
                 }
             }
         }
-        if(n[6] != null)
+        if(n[sensor] != null)
         {
             if (n[sensor] <= dist) {
                 return false;
@@ -77,6 +77,42 @@ public class AvoidanceManager //implements Callable<Boolean>
 
 
         return true;
+    }
+
+
+    public Integer retSensor(Integer sensor)
+    {
+        String s = Robot.comReadWrite(new byte[]{'q', '\r', '\n'});
+        //Log.d("Info", s);
+        String arr[] = s.split(" ");
+
+        Boolean flag = false;
+        Integer[] n = new Integer[8];
+        int i = 0;
+        for (String t : arr) {
+            if (t.contains("sensor:")) {
+                flag = true;
+                continue;
+            }
+            if (flag)
+            {
+                //so that other commands can't influence this function.... (other commands write to the std output of the robot, really bad for multithreading
+                //maybe we don't need the sensor flag anymore, too lazy to try....
+                if(t.startsWith("0x"))
+                {
+                    Integer base16 = (16 * ReallyStupidFunction(t.charAt(2))) + ReallyStupidFunction(t.charAt(3));
+                    n[i++] = base16;
+                }
+            }
+        }
+        if(n[sensor] != null)
+        {
+           return n[sensor];
+        }
+        return null;
+
+
+
     }
 
 

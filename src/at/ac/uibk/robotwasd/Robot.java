@@ -7,9 +7,9 @@ import jp.ksksue.driver.serial.FTDriver;
  */
 public class Robot
 {
-    public static Float xCoord;
-    public static Float yCoord;
-    public static Float theta;
+    public static Float xCoord = 0f;
+    public static Float yCoord = 0f;
+    public static Float theta = 0f;
     public static MainActivity  j;
     public static FTDriver com;
 
@@ -50,7 +50,7 @@ public class Robot
     public static String comReadWrite(byte[] data)
     {
 
-        if(data[0] == 's')
+        if(data[0] == 'i')
         {
 
             driveForward = false;

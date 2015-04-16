@@ -174,6 +174,8 @@ public class MainActivity extends Activity {
 	// stop
 	public void buttonS_onClick(View v) {
         MainThread.youShallNotPass = true;
+        logText(Robot.comReadWrite(new byte[] {'i' ,'\r', '\n' }));
+
 
 	}
 
