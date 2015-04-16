@@ -16,7 +16,7 @@ public class CurrentTest implements Runnable {
 
 	public void run() {
 		// Robot.SetVelocity((byte) 60, (byte) 60);
-		youShallNotPass = false;
+		//youShallNotPass = false;
 		/*while (true) {
 			try {
 				if (youShallNotPass) {
@@ -76,23 +76,17 @@ public class CurrentTest implements Runnable {
             }
         }
         /*
-		Robot.com.write(new byte[] { 'w', '\r', '\n' });
-		while(AM.Avoid(15, 3)) { 
-			Robot.com.write(new byte[] { 's', '\r', '\n' });
+		if(AM.Avoid(15, 3)) { 
+			Robot.com.write(new byte[] { 'i', '\r', '\n' });
 		}
 		
-		if (floatApproximation(Robot.xCoord, x, (float) 0.1) && floatApproximation(Robot.yCoord, y, (float) 0.1)) { //range depends on odometry...
-			Robot.com.write(new byte[] { 's', '\r', '\n' });
+		if (floatApproximation(Robot.xCoord, x, (float) 0.1) && floatApproximation(Robot.yCoord, y, 0.1)) { //range depends on odometry...
+			Robot.com.write(new byte[] { 'i', '\r', '\n' });
 			toTurn = theta - Robot.theta;
 			checkAngle(toTurn);
 			return;
 			
 		}
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         bugAvoid(x, y, theta);
 		*/
 
@@ -105,7 +99,7 @@ public class CurrentTest implements Runnable {
 	 * @param range
 	 * @return
 	 */
-	private boolean floatApproximation (float a, float b, float range) {
+	private boolean floatApproximation (float a, float b, double range) {
 		if ( a < b + range && a > b - range)
 			return true;
 		else
@@ -120,13 +114,21 @@ public class CurrentTest implements Runnable {
 		if (toTurn != 0) {
 			Robot.Turn((byte) toTurn);
 			try {
-				Thread.sleep(900);
+				Thread.sleep(calcSleepAngle(toTurn));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	/**
+	 * calculates the amount to sleep based on a angle
+	 * @param angle
+	 * @return time to sleep in milliseconds
+	 */
+	private int calcSleepAngle (float angle) {
+		return (int) (angle * 900 / 45); 
+	}
 	
 	
 
@@ -136,15 +138,31 @@ public class CurrentTest implements Runnable {
 	 * @throws InterruptedException
 	 */
 	public void turnUntilAlligned() throws InterruptedException {
-        float dist_to_side_sensor = 0f;
-		dist_to_side_sensor = AM.retSensor(3);
+        float distToSideSensor = 0f;
+        boolean leftOrRight;
+		distToSideSensor = (AM.retSensor(3) < AM.retSensor(2)) ? (AM.retSensor(3) ) : AM.retSensor(2);
+		if (AM.retSensor(3) < AM.retSensor(2)) {
+			distToSideSensor = AM.retSensor(3);
+			leftOrRight = false;
+		} else {
+			distToSideSensor = AM.retSensor(2);
+			leftOrRight = true;
+		}
 
         //angle between Main and side sensor
-        float main_to_side_sens = (float) Math.toRadians(17);
-        Float TurnTheThing = (dist_to_side_sensor * (float) Math.sin(main_to_side_sens)) / 6; //6cm is the distance between the main and the side sensor
-        Log.d("info", Double.toString(Math.asin(TurnTheThing)) +" " + Float.toString(main_to_side_sens) + " " + Float.toString(dist_to_side_sensor) );
-
-        Robot.Turn((byte) Math.toDegrees(Math.asin(TurnTheThing)));
+        float mainToSideSens = (float) Math.toRadians(17);
+        Float TurnTheThing = (distToSideSensor * (float) Math.sin(mainToSideSens)) / 6; //6cm is the distance between the main and the side sensor
+        double angle = Math.toDegrees(Math.asin(TurnTheThing));
+        Log.d("info", Double.toString(angle) +" " + Float.toString(mainToSideSens) + " " + Float.toString(distToSideSensor) );
+        
+        if(leftOrRight) {
+        	Robot.Turn((byte) (360 - angle));
+        	Thread.sleep(calcSleepAngle((float) (360 -angle)));
+        } else {
+        	Robot.Turn((byte) angle);
+            Thread.sleep(calcSleepAngle((float) angle));	
+        }
+        
     }
 
 }
