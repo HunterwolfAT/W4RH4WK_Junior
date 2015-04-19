@@ -18,7 +18,7 @@ public class CurrentTest implements Runnable {
 
     public static boolean isKilled = false;
 	public CurrentTest(Float xGoal,Float yGoal, Float thetaGoal) {
-		this.om = om;
+
         this.xGoal = xGoal;
         this.yGoal = yGoal;
         this.thetaGoal = thetaGoal;
@@ -28,7 +28,6 @@ public class CurrentTest implements Runnable {
 	public void run() {
         om = new OdometryManager(xGoal,yGoal);
         OdomThread = new Thread(om);
-
         OdomThread.start();
         bugAvoid(xGoal, yGoal, thetaGoal);
 	}

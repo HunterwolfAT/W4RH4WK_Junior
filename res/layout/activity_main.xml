@@ -26,10 +26,7 @@
         android:id="@+id/ThetaText"
         android:layout_row="13"
         android:layout_column="24"
-        android:digits="4"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/xText"
-        android:layout_toEndOf="@+id/xText" />
+        android:digits="4" />
 
     <Button
         android:id="@+id/buttonSquare"
@@ -64,7 +61,10 @@
         android:id="@+id/xText"
         android:layout_row="13"
         android:layout_column="19"
-        android:digits="4" />
+        android:digits="4"
+        android:layout_above="@+id/buttonLedOn"
+        android:layout_toRightOf="@+id/yText"
+        android:layout_toEndOf="@+id/yText" />
 
     <Button
         android:layout_width="wrap_content"

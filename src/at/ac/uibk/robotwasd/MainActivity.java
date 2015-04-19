@@ -204,9 +204,9 @@ public class MainActivity extends Activity {
 
         CurrentTest.youShallNotPass = true;
 
-        Robot.xCoord = 0f;
-        Robot.yCoord = 0f;
-        Robot.theta = 0f;
+        //Robot.xCoord = 0f;
+        //Robot.yCoord = 0f;
+        //Robot.theta = 0f;
        // thr.stop();
 
 
@@ -234,8 +234,8 @@ public class MainActivity extends Activity {
 	{
 
         //37/100 is calibration to convert in cm
-        Float x = (Float.parseFloat(xEdit.getText().toString())* 37) / 100;
-        Float y = (Float.parseFloat(yEdit.getText().toString())* 37) / 100;
+        Float x = (Float.parseFloat(xEdit.getText().toString())); //* 37) / 100;
+        Float y = (Float.parseFloat(yEdit.getText().toString())); //* 37) / 100;
         Float theta = Float.parseFloat(thetaEdit.getText().toString());
 
         MainThread = new CurrentTest(x,y,theta);
