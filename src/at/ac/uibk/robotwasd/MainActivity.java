@@ -2,6 +2,7 @@ package at.ac.uibk.robotwasd;
 
 import jp.ksksue.driver.serial.FTDriver;
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -234,9 +235,12 @@ public class MainActivity extends Activity {
             x = new Thread(MainThread);
             x.start();
         }
-
-
-
+	}
+	
+	public void buttoncam_onClick(View v)
+	{
+		Intent i = new Intent(this, BallManager.class);
+		startActivity(i);
 	}
 	
 

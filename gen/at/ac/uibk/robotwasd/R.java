@@ -55,21 +55,22 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f090009;
-        public static final int ThetaText=0x7f090006;
+        public static final int RelativeLayout1=0x7f09000a;
+        public static final int ThetaText=0x7f090007;
         public static final int any=0x7f090000;
         public static final int back=0x7f090001;
-        public static final int buttonLedOff=0x7f09000c;
-        public static final int buttonLedOn=0x7f09000a;
-        public static final int buttonSensor=0x7f09000b;
-        public static final int buttonSquare=0x7f090007;
-        public static final int connect=0x7f09000d;
-        public static final int disconnect=0x7f09000e;
+        public static final int buttonLedOff=0x7f09000d;
+        public static final int buttonLedOn=0x7f09000b;
+        public static final int buttonSensor=0x7f09000c;
+        public static final int buttonSquare=0x7f090008;
+        public static final int cam_button=0x7f090003;
+        public static final int connect=0x7f09000e;
+        public static final int disconnect=0x7f09000f;
         public static final int front=0x7f090002;
-        public static final int stop_button=0x7f090003;
-        public static final int textLog=0x7f090008;
-        public static final int xText=0x7f090004;
-        public static final int yText=0x7f090005;
+        public static final int stop_button=0x7f090004;
+        public static final int textLog=0x7f090009;
+        public static final int xText=0x7f090005;
+        public static final int yText=0x7f090006;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

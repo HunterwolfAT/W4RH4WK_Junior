@@ -13,6 +13,16 @@
         <Button
             android:layout_width="85dp"
             android:layout_height="wrap_content"
+            android:text="Cam"
+            android:id="@+id/cam_button"
+            android:layout_row="12"
+            android:layout_column="16"
+            android:onClick="buttoncam_onClick"
+            />
+        
+        <Button
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
             android:text="Stop"
             android:id="@+id/stop_button"
             android:layout_row="12"
