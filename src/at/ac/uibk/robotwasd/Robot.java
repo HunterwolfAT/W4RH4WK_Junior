@@ -1,5 +1,7 @@
 package at.ac.uibk.robotwasd;
 
+import android.util.Log;
+
 import jp.ksksue.driver.serial.FTDriver;
 
 /**
@@ -7,9 +9,9 @@ import jp.ksksue.driver.serial.FTDriver;
  */
 public class Robot
 {
-    public static Float xCoord = 0f;
-    public static Float yCoord = 0f;
-    public static Float theta = 0f;
+    public static volatile Float xCoord = 0f;
+    public static volatile Float yCoord = 0f;
+    public static volatile Float theta = 0f;
     public static MainActivity  j;
     public static FTDriver com;
 
@@ -57,22 +59,36 @@ public class Robot
         }
         else if(data[0] == 'w')
         {
+
+            //Log.d("Info", "I'm driving Forward");
             driveForward = true;
+
 
         }
         else if(data[0] == 'l')
         {
             driveForward = false;
-            theta += (float)(data[1]);
+            //Log.d("info", "In comReadWrite " + Float.toString(((float) (data[1])) / 1.2f));
+            theta += (((float) (data[1])) / 1.2f);
+
+            xCoord += (float) Math.sin(Math.toRadians(data[1] / 1.2)) * 3;
+            yCoord += (float) Math.cos(Math.toRadians(data[1] / 1.2)) * 3;
+
+
         }
         com.write(data);
+
+
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             // ignore
         }
         return comRead();
+
     }
+
+
 
     public static void Drive(byte distance_cm) {
         comReadWrite(
@@ -80,11 +96,26 @@ public class Robot
         );
     }
 
-    public static  void Turn(byte degree) {
-        float x = (float)degree * 1.13f;
-        comReadWrite(
-                new byte[]{'l', (byte) x, '\r', '\n'}
-        );
+    public static  void Turn(float degree) {
+        //Log.d("info", "In RobotTurn " + Float.toString(degree));
+        float x = degree * 1.2f;
+        if(x > 127 || x < -127)
+        {
+            float newTurn = x/2;
+            comReadWrite(
+                    new byte[]{'l', (byte) newTurn, '\r', '\n'}
+            );
+            try { Thread.sleep(Integer.signum((int) (newTurn * 10)) * (int) (newTurn*10)); } catch(Exception e){}
+            comReadWrite(
+                    new byte[]{'l', (byte) newTurn, '\r', '\n'}
+            );
+            try { Thread.sleep(Integer.signum((int) (newTurn * 10)) * (int) (newTurn*10)); } catch(Exception e){}
+        }
+        else {
+            comReadWrite(
+                    new byte[]{'l', (byte) x, '\r', '\n'}
+            );
+        }
     }
 
 }

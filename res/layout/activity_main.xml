@@ -1,14 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:weightSum="1"
+    android:orientation="vertical">
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="230dp"
-        android:columnCount="27" >
+    <Button
+        android:id="@+id/buttonSensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:minWidth="80dp"
+        android:onClick="buttonSensor_onClick"
+        android:text="Read Sensor"
+        android:layout_row="13"
+        android:layout_column="28"
+        android:layout_below="@+id/buttonLedOn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="85dp"
@@ -30,95 +40,149 @@
             android:onClick="buttonS_onClick"
             />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/xText"
-            android:layout_row="13"
-            android:layout_column="19" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ThetaText"
+        android:layout_row="13"
+        android:layout_column="24"
+        android:digits="4" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/yText"
-            android:layout_row="13"
-            android:layout_column="23" />
+    <Button
+        android:id="@+id/buttonSquare"
+        android:layout_width="99dp"
+        android:layout_height="wrap_content"
+        android:onClick="doTheThing_onClick"
+        android:text="DoSth"
+        android:layout_row="12"
+        android:layout_column="27"
+        android:layout_gravity="right"
+        android:layout_below="@+id/stop_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ThetaText"
-            android:layout_row="13"
-            android:layout_column="24" />
+    <Button
+        android:id="@+id/buttonLedOff"
+        android:layout_width="106dp"
+        android:layout_height="40dp"
+        android:minHeight="60dp"
+        android:minWidth="80dp"
+        android:onClick="buttonLedOff_onClick"
+        android:text="LED off"
+        android:layout_row="12"
+        android:layout_column="24"
+        android:layout_alignBottom="@+id/buttonLedOn"
+        android:layout_toRightOf="@+id/buttonLedOn"
+        android:layout_toEndOf="@+id/buttonLedOn" />
 
-        <Button
-            android:id="@+id/buttonSquare"
-            android:layout_width="99dp"
-            android:layout_height="71dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/textLog"
-            android:onClick="doTheThing_onClick"
-            android:text="DoSth"
-            android:layout_row="13"
-            android:layout_column="26" />
-    </GridLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/xText"
+        android:layout_row="13"
+        android:layout_column="19"
+        android:digits="4"
+        android:layout_above="@+id/buttonLedOn"
+        android:layout_toRightOf="@+id/yText"
+        android:layout_toEndOf="@+id/yText" />
 
-    <RelativeLayout
-        android:id="@+id/RelativeLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.61"
-        android:orientation="vertical" >
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/stop_button"
+        android:layout_row="12"
+        android:layout_column="26"
+        android:onClick="buttonS_onClick"
+        android:layout_gravity="right"
+        android:layout_alignLeft="@+id/buttonSquare"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/buttonSquare"
+        android:layout_alignEnd="@+id/buttonSquare" />
 
-        <Button
-            android:id="@+id/buttonLedOn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:minHeight="60dp"
-            android:minWidth="80dp"
-            android:onClick="buttonLedOn_onClick"
-            android:text="LED on" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/yText"
+        android:layout_row="13"
+        android:layout_column="23"
+        android:digits="4"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ThetaText"
+        android:layout_toEndOf="@+id/ThetaText" />
 
-        <Button
-            android:id="@+id/buttonSensor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:minHeight="60dp"
-            android:minWidth="80dp"
-            android:onClick="buttonSensor_onClick"
-            android:text="Read Sensor" />
+    <EditText
+        android:id="@+id/textLog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:enabled="false"
+        android:scrollbars="none"
+        android:textSize="12sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false">
 
-        <EditText
-            android:id="@+id/textLog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/buttonLedOn"
-            android:ems="10"
-            android:enabled="false"
-            android:scrollbars="none"
-            android:textSize="12sp" >
+        <requestFocus />
+    </EditText>
 
-            <requestFocus />
-        </EditText>
+    <Button
+        android:id="@+id/buttonLedOn"
+        android:layout_width="105dp"
+        android:layout_height="37dp"
+        android:minHeight="60dp"
+        android:minWidth="80dp"
+        android:onClick="buttonLedOn_onClick"
+        android:text="LED on"
+        android:layout_row="13"
+        android:layout_column="27"
+        android:layout_below="@+id/ThetaText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-        <Button
-            android:id="@+id/buttonLedOff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/buttonSensor"
-            android:minHeight="60dp"
-            android:minWidth="80dp"
-            android:onClick="buttonLedOff_onClick"
-            android:text="LED off" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drive100"
+        android:id="@+id/drive100"
+        android:layout_below="@+id/buttonSquare"
+        android:layout_alignLeft="@+id/buttonSquare"
+        android:layout_alignStart="@+id/buttonSquare"
+        android:onClick="button100_onClick" />
 
-    </RelativeLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/xEdit"
+        android:layout_below="@+id/drive100"
+        android:layout_alignLeft="@+id/drive100"
+        android:layout_alignStart="@+id/drive100"
+        android:text="x" />
 
-</LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/yEdit"
+        android:layout_below="@+id/xEdit"
+        android:layout_alignLeft="@+id/xEdit"
+        android:layout_alignStart="@+id/xEdit"
+        android:text="y" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/thetaEdit"
+        android:layout_below="@+id/yEdit"
+        android:layout_alignLeft="@+id/yEdit"
+        android:layout_alignStart="@+id/yEdit"
+        android:text="theta" />
+
+</RelativeLayout>
