@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.lang.Thread;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -40,17 +42,21 @@ import java.util.concurrent.Future;
 public class MainActivity extends Activity {
 
 	@SuppressWarnings("unused")
-	private String TAG = "iRobot";
+	private String TAG = "SwagBot";
 	private TextView textLog;
     private TextView xText;
     private TextView yText;
     private TextView ThetaText;
+    private TextView xEdit;
+    private TextView yEdit;
+    private TextView thetaEdit;
 	private FTDriver com;
 
 
     private CurrentTest MainThread;
-    Thread x;
-    AvoidanceManager AM;
+    private Timer measurementTimer;
+    Thread thr;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
     {
@@ -58,16 +64,26 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		textLog = (TextView) findViewById(R.id.textLog);
+        xText = (TextView) findViewById(R.id.xText);
+        yText = (TextView) findViewById(R.id.yText);
+        ThetaText = (TextView) findViewById(R.id.ThetaText);
+        xEdit = (TextView) findViewById(R.id.xEdit);
+        yEdit = (TextView) findViewById(R.id.yEdit);
+        thetaEdit = (TextView) findViewById(R.id.thetaEdit);
+
         Robot Robot = new Robot();
 
-        AM = new AvoidanceManager();
-        MainThread = new CurrentTest(AM);
+
+
 		com = new FTDriver((UsbManager) getSystemService(USB_SERVICE));
 
 		connect();
         Robot.com = com;
 
         Log.d("Info","Connection established");
+
+        measurementTimer = new Timer();
+        measurementTimer.scheduleAtFixedRate(new MeasurementTimerTask(this), 0, 500);
 
 
 	}
@@ -127,15 +143,31 @@ public class MainActivity extends Activity {
 		}
 	}
 
-    public void logCoord(Integer x, Integer y, Float theta) {
 
-            xText.setText(x.toString());
-            yText.setText(y.toString());
-            ThetaText.setText(theta.toString());
 
-    }
+    private class MeasurementTimerTask extends TimerTask
+    {
+        MainActivity ax;
 
-	@Override
+        public MeasurementTimerTask(MainActivity av)
+        {
+            ax = av;
+        }
+        @Override
+        public void run()
+        {
+            ax.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    xText.setText(Robot.xCoord.toString());
+                    yText.setText(Robot.yCoord.toString());
+                    ThetaText.setText(Robot.theta.toString());
+                }
+            });
+
+        }
+     }
+
 	public boolean onCreateOptionsMenu(Menu menu)
     {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -159,56 +191,28 @@ public class MainActivity extends Activity {
 		}
 	}
 
-
-	// move forward
-	public void buttonW_onClick(View v) {
-		logText(Robot.comReadWrite(new byte[]{'w', '\r', '\n'}));
-
-	}
-
-	// turn left
-	public void buttonA_onClick(View v) {
-		logText(Robot.comReadWrite(new byte[] { 'a', '\r', '\n' }));
-	}
+    public void button100_onClick(View v) {
+        Robot.comReadWrite(new byte[]{'w', '\r', '\n'});
+        try{Thread.sleep(100);}catch(Exception e){}
+        Robot.comReadWrite(new byte[] {'i' ,'\r', '\n' });
+    }
 
 	// stop
-	public void buttonS_onClick(View v) {
-        MainThread.youShallNotPass = true;
+	public void buttonS_onClick(View v)
+    {
         logText(Robot.comReadWrite(new byte[] {'i' ,'\r', '\n' }));
 
+        CurrentTest.youShallNotPass = true;
+
+        Robot.xCoord = 0f;
+        Robot.yCoord = 0f;
+        Robot.theta = 0f;
+       // thr.stop();
+
+
 
 	}
 
-	// turn right
-	public void buttonD_onClick(View v) {
-		logText(Robot.comReadWrite(new byte[] { 'd', '\r', '\n' }));
-	}
-
-	// move backward
-	public void buttonX_onClick(View v) {
-		// logText(comReadWrite(new byte[] { 'x', '\r', '\n' }));
-        Robot.SetVelocity((byte) -30, (byte) -30);
-	}
-
-	// lower bar a few degrees
-	public void buttonMinus_onClick(View v) {
-		logText(Robot.comReadWrite(new byte[] { '-', '\r', '\n' }));
-	}
-
-	// rise bar a few degrees
-	public void buttonPlus_onClick(View v) {
-		logText(Robot.comReadWrite(new byte[] { '+', '\r', '\n' }));
-	}
-
-	// fixed position for bar (low)
-	public void buttonDown_onClick(View v) {
-        Robot.SetBar((byte) 0);
-	}
-
-	// fixed position for bar (high)
-	public void buttonUp_onClick(View v) {
-        Robot.SetBar((byte) 255);
-	}
 
 	public void buttonLedOn_onClick(View v) {
 		// logText(comReadWrite(new byte[] { 'r', '\r', '\n' }));
@@ -228,11 +232,18 @@ public class MainActivity extends Activity {
 	
 	public void doTheThing_onClick(View v)
 	{
+
+        //37/100 is calibration to convert in cm
+        Float x = (Float.parseFloat(xEdit.getText().toString())* 37) / 100;
+        Float y = (Float.parseFloat(yEdit.getText().toString())* 37) / 100;
+        Float theta = Float.parseFloat(thetaEdit.getText().toString());
+
+        MainThread = new CurrentTest(x,y,theta);
         //check if x is null then execute or thread was killed
-        if(x == null || !x.isAlive())
+        if(thr == null || !thr.isAlive())
         {
-            x = new Thread(MainThread);
-            x.start();
+            thr = new Thread(MainThread);
+            thr.start();
         }
 
 

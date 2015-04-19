@@ -22,65 +22,59 @@ public class AvoidanceManager //implements Callable<Boolean>
         sensor 3 == right
 
      */
-  /*  public AvoidanceManager(Integer dist, Integer sensor)
-    {
-        this.dist = dist;
-        this.sensor = sensor;
-    }
 
-
-    public Boolean call()
-    {
-        while(true)
-        {
-            if (!Avoid())
-            {
-                return true;
-            }
-        }
-    }*/
-    /*
-        Avoidance Func
-        Return false if sth is too close (dist) to the sensor
-
+    /**
+     * checks if something is within range
+     * @param ldist range for left sensor
+     * @param rdist range for right sensor
+     * @param mdist range for middle sensor
+     * @return 1 left, 2 right, 3 middle, 0 nothing
      */
-    public synchronized boolean Avoid(Integer dist, Integer sensor) {
+
+    public static synchronized Integer Avoid(Integer ldist, Integer rdist, Integer mdist)
+    {
         String s = Robot.comReadWrite(new byte[]{'q', '\r', '\n'});
         //Log.d("Info", s);
         String arr[] = s.split(" ");
-
-        Boolean flag = false;
         Integer[] n = new Integer[8];
         int i = 0;
-        for (String t : arr) {
-            if (t.contains("sensor:")) {
-                flag = true;
-                continue;
-            }
-            if (flag)
-            {
-                //so that other commands can't influence this function.... (other commands write to the std output of the robot, really bad for multithreading
-                //maybe we don't need the sensor flag anymore, too lazy to try....
-                if(t.startsWith("0x"))
-                {
-                    Integer base16 = (16 * ReallyStupidFunction(t.charAt(2))) + ReallyStupidFunction(t.charAt(3));
-                    n[i++] = base16;
-                }
-            }
-        }
-        if(n[sensor] != null)
+        for (String t : arr)
         {
-            if (n[sensor] <= dist) {
-                return false;
+            //so that other commands can't influence this function.... (other commands write to the std output of the robot, really bad for multithreading
+            //maybe we don't need the sensor flag anymore, too lazy to try....
+            if(t.startsWith("0x"))
+            {
+                Integer base16 = (16 * ReallyStupidFunction(t.charAt(2))) + ReallyStupidFunction(t.charAt(3));
+                n[i++] = base16;
             }
+
         }
 
+        if(n[6] <= mdist)
+        {
+            Robot.comReadWrite(new byte[] { 'u', (byte) 255, 0, '\r', '\n' });
+            return 3;
+        }
 
-        return true;
+        if(n[3] <= rdist)
+        {
+            Robot.comReadWrite(new byte[] { 'u', (byte) 255, 0, '\r', '\n' });
+            return 2;
+        }
+
+        if(n[2] <= ldist)
+        {
+            Robot.comReadWrite(new byte[] { 'u', (byte) 255, 0, '\r', '\n' });
+            return 1;
+        }
+
+        Robot.comReadWrite(new byte[] { 'u',  0, (byte) 255, '\r', '\n' });
+        return 0;
+
     }
 
 
-    public Integer retSensor(Integer sensor)
+    public static synchronized Integer retSensor(Integer sensor)
     {
         String s = Robot.comReadWrite(new byte[]{'q', '\r', '\n'});
         //Log.d("Info", s);
@@ -107,8 +101,10 @@ public class AvoidanceManager //implements Callable<Boolean>
         }
         if(n[sensor] != null)
         {
+
            return n[sensor];
         }
+
         return null;
 
 
@@ -119,7 +115,7 @@ public class AvoidanceManager //implements Callable<Boolean>
     /*because java std lib isn't working...
         converts a char into int (char must be hex)
      */
-    private Integer ReallyStupidFunction(char c)
+    private  static Integer ReallyStupidFunction(char c)
     {
         switch(c)
         {
