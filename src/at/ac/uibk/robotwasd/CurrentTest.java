@@ -34,10 +34,33 @@ public class CurrentTest implements Runnable {
 
     private void turnToGoal(float x, float y, float theta)
     {
-        float alpha = (float) Math.toDegrees(Math.atan((double) ((y - Robot.yCoord)) / (x - Robot.xCoord)));
+        float alpha = (float) Math.toDegrees(Math.atan2((double) ((y - Robot.yCoord)),(x - Robot.xCoord)));
         float toTurn = alpha - Robot.theta;
         //Log.d("info", "Turning: " + Float.toString(toTurn));
         checkAngle(toTurn);
+        /*double deltay = y - Robot.yCoord;
+        double deltax = x - Robot.xCoord;
+        double dist =  Math.sqrt( (deltax * deltax + deltay * deltay));
+        double tmpTheta1, tmpTheta2;
+        if(dist > 0.2)
+        {
+            double tmpTheta = Math.asin(deltay / dist);
+
+            if(deltax < 0 && deltay > 0)
+            {
+                tmpTheta = Math.toRadians(180) - tmpTheta;
+
+            }
+            if(deltax < 0 && deltay < 0)
+            {
+                tmpTheta = -Math.toRadians(180) -tmpTheta;
+            }
+
+            tmpTheta1 = Math.toDegrees(tmpTheta) - theta;
+
+        }
+
+        checkAngle(tmpTheta1);*/
 
     }
 
@@ -87,18 +110,18 @@ public class CurrentTest implements Runnable {
                         checkAngle(-90);
                     }
                     Robot.comReadWrite(new byte[]{'w', '\r', '\n'});
-                    Thread.sleep(900);
+                    Thread.sleep(1750);
                     turnToGoal(x, y, theta);
 
                 }
 
 
-                /*
+
                 if(Robot.xCoord > x || Robot.yCoord > y)
                 {
                     turnToGoal(x,y,theta);
                 }
-                */
+
 
 
 

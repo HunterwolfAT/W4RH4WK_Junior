@@ -6,17 +6,18 @@
     android:weightSum="1"
     android:orientation="vertical">
 
+
     <Button
         android:id="@+id/buttonSensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="60dp"
+        android:minHeight="40dp"
         android:minWidth="80dp"
         android:onClick="buttonSensor_onClick"
         android:text="Read Sensor"
         android:layout_row="13"
         android:layout_column="28"
-        android:layout_below="@+id/buttonLedOn"
+        android:layout_below="@+id/buttonLedOff"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -26,7 +27,13 @@
         android:id="@+id/ThetaText"
         android:layout_row="13"
         android:layout_column="24"
-        android:digits="4" />
+        android:digits="4"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:maxLength="5"
+        android:enabled="false" />
 
     <Button
         android:id="@+id/buttonSquare"
@@ -61,10 +68,12 @@
         android:id="@+id/xText"
         android:layout_row="13"
         android:layout_column="19"
+        android:enabled="false"
         android:digits="4"
-        android:layout_above="@+id/buttonLedOn"
-        android:layout_toRightOf="@+id/yText"
-        android:layout_toEndOf="@+id/yText" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ThetaText"
+        android:layout_toEndOf="@+id/ThetaText"
+        android:maxLength="5" />
 
     <Button
         android:layout_width="wrap_content"
@@ -84,12 +93,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/yText"
+        android:enabled="false"
         android:layout_row="13"
         android:layout_column="23"
         android:digits="4"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/ThetaText"
-        android:layout_toEndOf="@+id/ThetaText" />
+        android:layout_toRightOf="@+id/xText"
+        android:layout_toEndOf="@+id/xText"
+        android:maxLength="5" />
 
     <EditText
         android:id="@+id/textLog"
@@ -125,12 +136,14 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Drive100"
-        android:id="@+id/drive100"
+        android:text="Drive cm"
+        android:id="@+id/driveCm"
         android:layout_below="@+id/buttonSquare"
         android:layout_alignLeft="@+id/buttonSquare"
         android:layout_alignStart="@+id/buttonSquare"
-        android:onClick="button100_onClick" />
+        android:onClick="buttonCM_onClick"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -138,10 +151,10 @@
         android:inputType="numberSigned"
         android:ems="10"
         android:id="@+id/xEdit"
-        android:layout_below="@+id/drive100"
-        android:layout_alignLeft="@+id/drive100"
-        android:layout_alignStart="@+id/drive100"
-        android:text="x" />
+        android:layout_below="@+id/driveCm"
+        android:layout_alignLeft="@+id/driveCm"
+        android:layout_alignStart="@+id/driveCm"
+        android:text="40" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -152,7 +165,7 @@
         android:layout_below="@+id/xEdit"
         android:layout_alignLeft="@+id/xEdit"
         android:layout_alignStart="@+id/xEdit"
-        android:text="y" />
+        android:text="40" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -163,6 +176,43 @@
         android:layout_below="@+id/yEdit"
         android:layout_alignLeft="@+id/yEdit"
         android:layout_alignStart="@+id/yEdit"
-        android:text="theta" />
+        android:text="0" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:text="x:"
+        android:layout_below="@+id/driveCm"
+        android:layout_alignRight="@+id/editText2"
+        android:layout_alignEnd="@+id/editText2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_above="@+id/thetaEdit"
+        android:layout_toLeftOf="@+id/yEdit"
+        android:layout_toStartOf="@+id/yEdit"
+        android:text="y:" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText3"
+        android:layout_alignBottom="@+id/thetaEdit"
+        android:layout_toLeftOf="@+id/thetaEdit"
+        android:layout_toStartOf="@+id/thetaEdit"
+        android:text="t:" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:background="@drawable/killallhumans"
+        android:layout_toStartOf="@+id/editText2"
+        android:layout_above="@+id/textLog"
+        android:layout_toLeftOf="@+id/editText2"
+        android:layout_alignTop="@+id/editText" />
 
 </RelativeLayout>

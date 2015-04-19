@@ -71,8 +71,8 @@ public class Robot
             //Log.d("info", "In comReadWrite " + Float.toString(((float) (data[1])) / 1.2f));
             theta += (((float) (data[1])) / 1.2f);
 
-            xCoord += (float) Math.sin(Math.toRadians(data[1] / 1.2)) * 3;
-            yCoord += (float) Math.cos(Math.toRadians(data[1] / 1.2)) * 3;
+            xCoord += (float) Math.cos(Math.toRadians(data[1] / 1.2)) * 2.22f;
+            yCoord += (float) Math.sin(Math.toRadians(data[1] / 1.2)) * 2.22f;
 
 
         }

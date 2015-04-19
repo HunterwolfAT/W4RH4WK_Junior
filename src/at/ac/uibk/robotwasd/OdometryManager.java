@@ -24,7 +24,7 @@ public class OdometryManager implements Runnable
     {
         while(true)
         {
-           if(floatApproximation(Robot.yCoord, Goaly, 2f) && floatApproximation(Robot.xCoord, Goalx, 2f))
+           if(floatApproximation(Robot.yCoord, Goaly, 4f) && floatApproximation(Robot.xCoord, Goalx, 4f))
            {
                CurrentTest.isKilled = true;
                break;
@@ -36,8 +36,8 @@ public class OdometryManager implements Runnable
 			}
             if(Robot.driveForward)
             {
-                Robot.xCoord +=   (float) (Math.cos(Math.toRadians(Robot.theta))) ;
-                Robot.yCoord +=   (float) (Math.sin(Math.toRadians(Robot.theta))) ;
+                Robot.xCoord  +=   (float) (Math.cos(Math.toRadians(Robot.theta))) ;
+                Robot.yCoord  +=   (float) (Math.sin(Math.toRadians(Robot.theta))) ;
             }
             //Log.d("Coord","x:" +  Float.toString(Robot.xCoord) + "; y:" + Float.toString(Robot.yCoord) + "th: " + Float.toString(Robot.theta));
             //Log.d("Sensor", "Fr: " + AvoidanceManager.retSensor(6) +" Rg" + AvoidanceManager.retSensor(3) + " L" + AvoidanceManager.retSensor(2));

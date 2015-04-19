@@ -191,10 +191,18 @@ public class MainActivity extends Activity {
 		}
 	}
 
-    public void button100_onClick(View v) {
-        Robot.comReadWrite(new byte[]{'w', '\r', '\n'});
-        try{Thread.sleep(100);}catch(Exception e){}
-        Robot.comReadWrite(new byte[] {'i' ,'\r', '\n' });
+    public void buttonCM_onClick(View v) {
+        Float x = (Float.parseFloat(xEdit.getText().toString())) * 37 / 100f;
+        Float y = (Float.parseFloat(yEdit.getText().toString())) * 37 / 100f;
+        Float theta = Float.parseFloat(thetaEdit.getText().toString());
+
+        MainThread = new CurrentTest(x,y,theta);
+        //check if x is null then execute or thread was killed
+        if(thr == null || !thr.isAlive())
+        {
+            thr = new Thread(MainThread);
+            thr.start();
+        }
     }
 
 	// stop
