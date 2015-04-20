@@ -69,7 +69,7 @@ public class Robot
         {
             driveForward = false;
             //Log.d("info", "In comReadWrite " + Float.toString(((float) (data[1])) / 1.2f));
-            theta += (((float) (data[1])) / 1.2f);
+            theta += (((float) (data[1])) / 1.16f);
 
             xCoord += (float) Math.cos(Math.toRadians(data[1] / 1.2)) * 2.22f;
             yCoord += (float) Math.sin(Math.toRadians(data[1] / 1.2)) * 2.22f;
@@ -98,7 +98,7 @@ public class Robot
 
     public static  void Turn(float degree) {
         //Log.d("info", "In RobotTurn " + Float.toString(degree));
-        float x = degree * 1.2f;
+        float x = degree * 1.16f;
         if(x > 127 || x < -127)
         {
             float newTurn = x/2;

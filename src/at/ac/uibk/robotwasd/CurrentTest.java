@@ -83,8 +83,8 @@ public class CurrentTest implements Runnable {
                 if(youShallNotPass || isKilled)
                 {
                     Robot.comReadWrite(new byte[]{'i', '\r', '\n'});
-                    Robot.xCoord = 0f;
-                    Robot.yCoord = 0f;
+                    //Robot.xCoord = 0f;
+                    //Robot.yCoord = 0f;
 
                     if(isKilled)
                     {
@@ -92,7 +92,7 @@ public class CurrentTest implements Runnable {
                         checkAngle(toTurn);
 
                     }
-                    Robot.theta = 0f;
+                    //Robot.theta = 0f;
                     OdomThread.interrupt();
                     break;
                 }
@@ -117,11 +117,11 @@ public class CurrentTest implements Runnable {
 
 
 
-                if(Robot.xCoord > x || Robot.yCoord > y)
+               /* if(Robot.xCoord - 5 > x || Robot.yCoord - 5 > y)
                 {
                     turnToGoal(x,y,theta);
                 }
-
+                */
 
 
 

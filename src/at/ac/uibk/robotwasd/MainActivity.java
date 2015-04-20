@@ -42,29 +42,28 @@ import java.util.concurrent.Future;
 
 public class MainActivity extends Activity {
 
-	@SuppressWarnings("unused")
-	private String TAG = "SwagBot";
-	private TextView textLog;
+    @SuppressWarnings("unused")
+    private String TAG = "SwagBot";
+    private TextView textLog;
     private TextView xText;
     private TextView yText;
     private TextView ThetaText;
     private TextView xEdit;
     private TextView yEdit;
     private TextView thetaEdit;
-	private FTDriver com;
+    private FTDriver com;
 
 
     private CurrentTest MainThread;
     private Timer measurementTimer;
     Thread thr;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-    {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		textLog = (TextView) findViewById(R.id.textLog);
+        textLog = (TextView) findViewById(R.id.textLog);
         xText = (TextView) findViewById(R.id.xText);
         yText = (TextView) findViewById(R.id.yText);
         ThetaText = (TextView) findViewById(R.id.ThetaText);
@@ -75,88 +74,76 @@ public class MainActivity extends Activity {
         Robot Robot = new Robot();
 
 
+        com = new FTDriver((UsbManager) getSystemService(USB_SERVICE));
 
-		com = new FTDriver((UsbManager) getSystemService(USB_SERVICE));
-
-		connect();
+        connect();
         Robot.com = com;
 
-        Log.d("Info","Connection established");
+        Log.d("Info", "Connection established");
 
         measurementTimer = new Timer();
         measurementTimer.scheduleAtFixedRate(new MeasurementTimerTask(this), 0, 500);
 
 
-	}
+    }
 
-	public void connect()
-    {
-		// TODO implement permission request
+    public void connect() {
+        // TODO implement permission request
 
-		if (com.begin(9600)) {
-			textLog.append("connected\n");
-		} else {
-			textLog.append("could not connect\n");
-		}
-	}
+        if (com.begin(9600)) {
+            textLog.append("connected\n");
+        } else {
+            textLog.append("could not connect\n");
+        }
+    }
 
-	public void disconnect()
-    {
-		com.end();
-		if (!com.isConnected())
-        {
-			textLog.append("disconnected\n");
-		}
-	}
+    public void disconnect() {
+        com.end();
+        if (!com.isConnected()) {
+            textLog.append("disconnected\n");
+        }
+    }
 
 
+    /**
+     * transfers given bytes via the serial connection.
+     *
+     * @param data
+     */
+    public void comWrite(byte[] data) {
+        if (com.isConnected()) {
+            com.write(data);
+        } else {
+            textLog.append("not connected\n");
+        }
+    }
 
-	/**
-	 * transfers given bytes via the serial connection.
-	 * 
-	 * @param data
-	 */
-	public void comWrite(byte[] data)
-    {
-		if (com.isConnected()) {
-			com.write(data);
-		} else {
-			textLog.append("not connected\n");
-		}
-	}
-
-	/**
-	 * reads from the serial buffer. due to buffering, the read command is
-	 * issued 3 times at minimum and continuously as long as there are bytes to
-	 * read from the buffer. Note that this function does not block, it might
-	 * return an empty string if no bytes have been read at all.
-	 * 
-	 * @return buffer content as string
-	 */
+    /**
+     * reads from the serial buffer. due to buffering, the read command is
+     * issued 3 times at minimum and continuously as long as there are bytes to
+     * read from the buffer. Note that this function does not block, it might
+     * return an empty string if no bytes have been read at all.
+     *
+     * @return buffer content as string
+     */
 
 
+    public void logText(String text) {
+        if (text.length() > 0) {
+            textLog.append("[" + text.length() + "] " + text + "\n");
+        }
+    }
 
 
-
-	public void logText(String text) {
-		if (text.length() > 0) {
-			textLog.append("[" + text.length() + "] " + text + "\n");
-		}
-	}
-
-
-
-    private class MeasurementTimerTask extends TimerTask
-    {
+    private class MeasurementTimerTask extends TimerTask {
         MainActivity ax;
 
-        public MeasurementTimerTask(MainActivity av)
-        {
+        public MeasurementTimerTask(MainActivity av) {
             ax = av;
         }
+
         @Override
-        public void run()
-        {
+        public void run() {
             ax.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -167,100 +154,89 @@ public class MainActivity extends Activity {
             });
 
         }
-     }
+    }
 
-	public boolean onCreateOptionsMenu(Menu menu)
-    {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-    {
-		switch (item.getItemId()) {
-		case R.id.connect:
-			connect();
-			return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.connect:
+                connect();
+                return true;
 
-		case R.id.disconnect:
-			disconnect();
-			return true;
+            case R.id.disconnect:
+                disconnect();
+                return true;
 
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void buttonCM_onClick(View v) {
-        Float x = (Float.parseFloat(xEdit.getText().toString())) * 37 / 100f;
-        Float y = (Float.parseFloat(yEdit.getText().toString())) * 37 / 100f;
+        Float x = (Float.parseFloat(xEdit.getText().toString())) * 70 / 100f;
+        Float y = (Float.parseFloat(yEdit.getText().toString())) * 70 / 100f;
         Float theta = Float.parseFloat(thetaEdit.getText().toString());
 
-        MainThread = new CurrentTest(x,y,theta);
+        MainThread = new CurrentTest(x, y, theta);
         //check if x is null then execute or thread was killed
-        if(thr == null || !thr.isAlive())
-        {
+        if (thr == null || !thr.isAlive()) {
             thr = new Thread(MainThread);
             thr.start();
         }
     }
 
-	// stop
-	public void buttonS_onClick(View v)
-    {
-        logText(Robot.comReadWrite(new byte[] {'i' ,'\r', '\n' }));
+    // stop
+    public void buttonS_onClick(View v) {
+        logText(Robot.comReadWrite(new byte[]{'i', '\r', '\n'}));
 
         CurrentTest.youShallNotPass = true;
 
         //Robot.xCoord = 0f;
         //Robot.yCoord = 0f;
         //Robot.theta = 0f;
-       // thr.stop();
+        // thr.stop();
 
 
+    }
 
-	}
 
+    public void buttonLedOn_onClick(View v) {
+        // logText(comReadWrite(new byte[] { 'r', '\r', '\n' }));
+        Robot.SetLeds((byte) 255, (byte) 128);
+    }
 
-	public void buttonLedOn_onClick(View v) {
-		// logText(comReadWrite(new byte[] { 'r', '\r', '\n' }));
-		Robot.SetLeds((byte) 255, (byte) 128);
-	}
-
-	public void buttonLedOff_onClick(View v) {
-		// logText(comReadWrite(new byte[] { 'e', '\r', '\n' }));
+    public void buttonLedOff_onClick(View v) {
+        // logText(comReadWrite(new byte[] { 'e', '\r', '\n' }));
         Robot.SetLeds((byte) 0, (byte) 0);
-	}
+    }
 
-	public void buttonSensor_onClick(View v) {
-		logText(Robot.comReadWrite(new byte[] { 'q', '\r', '\n' }));
-	}
-	
+    public void buttonSensor_onClick(View v) {
+        logText(Robot.comReadWrite(new byte[]{'q', '\r', '\n'}));
+    }
 
-	
-	public void doTheThing_onClick(View v)
-	{
+    public void button90Deg_onClick(View v)
+    {
+        Robot.Turn(90);
+    }
+
+
+    public void doTheThing_onClick(View v) {
 
         //37/100 is calibration to convert in cm
         Float x = (Float.parseFloat(xEdit.getText().toString())); //* 37) / 100;
         Float y = (Float.parseFloat(yEdit.getText().toString())); //* 37) / 100;
         Float theta = Float.parseFloat(thetaEdit.getText().toString());
 
-        MainThread = new CurrentTest(x,y,theta);
+        MainThread = new CurrentTest(x, y, theta);
         //check if x is null then execute or thread was killed
-        if(thr == null || !thr.isAlive())
-        {
+        if (thr == null || !thr.isAlive()) {
             thr = new Thread(MainThread);
             thr.start();
         }
-	}
-	
-	public void buttoncam_onClick(View v)
-	{
-		Intent i = new Intent(this, BallManager.class);
-		startActivity(i);
-	}
-	
-
+    }
 }
