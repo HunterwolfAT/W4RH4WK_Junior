@@ -229,4 +229,13 @@
         android:onClick="button90Deg_onClick"
         android:nestedScrollingEnabled="false" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="switchCV"
+        android:id="@+id/switchBut"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignLeft="@+id/thetaEdit"
+        android:layout_alignStart="@+id/thetaEdit" />
+
 </RelativeLayout>
