@@ -236,6 +236,7 @@
         android:id="@+id/switchBut"
         android:layout_alignBottom="@+id/imageView"
         android:layout_alignLeft="@+id/thetaEdit"
-        android:layout_alignStart="@+id/thetaEdit" />
+        android:layout_alignStart="@+id/thetaEdit"
+        android:onClick="switchCamera" />
 
 </RelativeLayout>

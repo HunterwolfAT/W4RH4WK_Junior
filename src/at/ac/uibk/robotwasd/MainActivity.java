@@ -1,5 +1,6 @@
 package at.ac.uibk.robotwasd;
 
+import at.ac.uibk.robotwasd.Color.CameraActivity;
 import jp.ksksue.driver.serial.FTDriver;
 import android.app.Activity;
 import android.content.Intent;
@@ -52,7 +53,7 @@ public class MainActivity extends Activity {
     private TextView yEdit;
     private TextView thetaEdit;
     private FTDriver com;
-
+    private static MainActivity inst;
 
     private CurrentTest MainThread;
     private Timer measurementTimer;
@@ -60,6 +61,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -83,7 +85,7 @@ public class MainActivity extends Activity {
 
         measurementTimer = new Timer();
         measurementTimer.scheduleAtFixedRate(new MeasurementTimerTask(this), 0, 500);
-
+        inst = this;
 
     }
 
@@ -238,5 +240,24 @@ public class MainActivity extends Activity {
             thr = new Thread(MainThread);
             thr.start();
         }
+    }
+
+
+    public static MainActivity getInstance()
+    {
+        return inst;
+    }
+
+
+   public synchronized void threadSafeDebugOutput(String t)
+   {
+       Log.d("Output", t);
+   }
+
+    public void switchCamera(View v)
+    {
+        Intent myIntent = new Intent(this, CameraActivity.class);
+        startActivity(myIntent);
+
     }
 }
